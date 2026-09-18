@@ -21,12 +21,13 @@ public class virtualDog {
     }
     
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         virtualDog dog1 = new virtualDog("Blossom");
         System.out.println("You adopted " + dog1.name);
 
-        while (true) {
-
-        }
+        String answer = scanner.nextLine();
+        
 
     }
 }
