@@ -1,27 +1,108 @@
 import java.util.*;
 
 public class virtualAxolotl {
-    // global variables
-    String name = "";
-    int happiness = 0;
-    int hunger = 0;
-    int protein = 0;
-    int thirst = 0;
-    int steps = 0;
-    double money = 0; 
+    // instance variables
+    private String name;
+    private int happiness;
 
+    private int food;
+    private int hydration;
+    private int protein;
+    private int steps;
+    private int day; 
+
+    private double money;
+    private boolean alive;
+
+    //////////////////
+    // constructors //
+    //////////////////
+
+    // constructor 1
     public virtualAxolotl(String name) {
         this.name = name;
-        this.money = 100.0;
-        this.happiness = 0;
-        this.hunger = 100;
-        this.thirst = 100;
-        this.protein = 100;
-        this.steps = 0;
+
+        happiness = 50; 
+
+        food = 100;
+        hydration = 100;
+        protein = 100;
+        happiness = 50; 
+
+        steps = 0;
+        day = 1;
+
+        money = 150.0;
+        alive = true;
     }
 
-    public void updateName(String name) {
+    // constructor 2 (overloaded)
+    public virtualAxolotl(String name, double startingMoney) {
         this.name = name;
+
+        happiness = 50; 
+
+        food = 100;
+        hydration = 100;
+        protein = 100;
+        happiness = 50; 
+
+        steps = 0;
+        day = 1;
+
+        money = startingMoney;
+        alive = true;
+    } 
+
+    // getter methods
+    public String getName() {
+        return name;
+    }
+
+    public int getHappiness() {
+        return happiness;
+    }
+
+    public int getFood() {
+        return food; 
+    }
+
+    public int getHydration() {
+        return hydration;
+    }
+
+    public int getProtein() {
+        return protein;
+    }
+
+    public int getSteps() {
+        return steps;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public boolean getAlive() {
+        return alive;
+    }
+
+
+    // setter methods
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public void setHappiness(int happiness) {
+        this.happiness = happiness;
     }
     
     public static void main(String[] args) {
