@@ -286,7 +286,7 @@ public class virtualAxolotl {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("૮ ˶ᵔ ᵕ ᵔ˶ ა")
+        System.out.println("૮ ˶ᵔ ᵕ ᵔ˶ ა");
 
         System.out.println("-----------------------------------------------");
         System.out.print("You just adopted an axolotl! What's its name?: ");
@@ -307,7 +307,7 @@ public class virtualAxolotl {
             }
 
             else if (response == "status") {
-                if (yourPet.thirst <= 20 && yourPet.thirst > 0) {
+                if (yourPet.hydration <= 20 && yourPet.hydration > 0) {
                     System.out.println("Your axolotl is thirsty! They need water.");
                 }
             }
