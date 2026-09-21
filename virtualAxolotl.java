@@ -286,11 +286,13 @@ public class virtualAxolotl {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("૮ ˶ᵔ ᵕ ᵔ˶ ა");
-
+        System.out.println("   ૮ ˶ᵔ ᵕ ᵔ˶ ა   ");
+        System.out.println("Virtual Axolotl Simulator!");
+        System.out.println();
+        
         System.out.println("-----------------------------------------------");
         System.out.print("You just adopted an axolotl! What's its name?: ");
-        String newName = scanner.nextLine();
+        String newName = scanner.nextLine().trim();
         System.out.println("-----------------------------------------------");
 
         virtualAxolotl yourPet = new virtualAxolotl(newName.substring(0,1).toUpperCase() + newName.toLowerCase().substring(1));
