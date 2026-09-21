@@ -22,8 +22,6 @@ public class virtualAxolotl {
     public virtualAxolotl(String name) {
         this.name = name;
 
-        happiness = 50; 
-
         food = 100;
         hydration = 100;
         protein = 100;
@@ -53,6 +51,7 @@ public class virtualAxolotl {
         money = startingMoney;
         alive = true;
     } 
+
 
     /////////////////////
     // getter methods  //
@@ -94,6 +93,7 @@ public class virtualAxolotl {
         return alive;
     }
 
+
     /////////////////////
     // setter methods  //
     /////////////////////
@@ -108,7 +108,16 @@ public class virtualAxolotl {
 
     public void setHappiness(int happiness) {
         this.happiness = happiness;
+
+        if (this.happiness > 100) {
+            this.happiness = 100;
+        }
+
+        if (this.happiness < 0) {
+            this.happiness = 0;
+        }
     }
+
 
     //////////////////////////////
     // non-void return methods  //
@@ -158,7 +167,6 @@ public class virtualAxolotl {
         if (happiness > 100) {
             happiness = 100;
         }
-
         checkStats();
     } 
 
@@ -260,12 +268,9 @@ public class virtualAxolotl {
             return name + " really needs water!";
         }
         else if (happiness <= 20) {
-
             return name + " is feeling lonely.";
         }
-        else if (food >= 80
-                && hydration >= 80
-                && happiness >= 80) {
+        else if (food >= 80 && hydration >= 80 && happiness >= 80) {
             return name + " is thriving!";
         }
         else {
@@ -288,7 +293,6 @@ public class virtualAxolotl {
         System.out.printf("Money:      $%.2f%n", money);
         System.out.println("--------------------------------");
     }
-
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -362,14 +366,187 @@ public class virtualAxolotl {
                 System.out.println("+25 hydration");
             }
 
+            // feed response
+            else if (response.equals("feed")) {
+                System.out.println("What would you like to feed "+ yourPet.getName() + "?");
+                System.out.println("cucumber | shrimp | protein");
+                String foodChoice =scanner.nextLine().trim().toLowerCase();
 
+                if (foodChoice.equals("cucumber")) {
+                    yourPet.feed(15, 5);
+                    System.out.println(yourPet.getName() + " ate cucumber!");
+                }
+                else if (foodChoice.equals("shrimp")) {
+                    yourPet.feed(25, 20);
+                    System.out.println(yourPet.getName() + " ate shrimp!");
+                }
+                else if (foodChoice.equals("protein")) {
+                    yourPet.feed(20, 30);
+                    System.out.println(yourPet.getName() + " ate a protein meal!");
+                }
+                else {
+                    System.out.println("That food does not exist.");
+                }
+            }
 
+            // play response
+            else if (response.equals("play")) {
+                System.out.println();
+                System.out.println(yourPet.getName()+ " is going swimming!");
 
+                // definite count-based for loop
+                for (int i = 1; i <= 5; i++) {
+                    System.out.println("Swimming lap " + i + "...");
+                }
+                yourPet.play();
 
-           
+                System.out.println();
+                System.out.println(yourPet.getName() + " had fun!");
+                System.out.println("+15 happiness");
+            }
 
+            // walk response
+            else if (response.equals("walk")) {
+                System.out.print("How many steps should " + yourPet.getName() + " walk? ");
+                int walkSteps = scanner.nextInt();
+                scanner.nextLine();
+
+                // check if steps is valid
+                while (walkSteps <= 0) {
+                    System.out.println("Steps must be greater than 0.");
+                    System.out.print("Enter number of steps: ");
+                    walkSteps = scanner.nextInt();
+                    scanner.nextLine();
+                }
+
+                double earned =yourPet.walk(walkSteps);
+
+                System.out.println(yourPet.getName() + " walked " + walkSteps + " steps!");
+                System.out.printf("You earned $%.2f!%n", earned);
+            }
+
+            // store response
+            else if (response.equals("store")) {
+                boolean shopping = true;
+
+                // dynamic loop
+                while (shopping) {
+                    System.out.println();
+                    System.out.println("You have entered the Axolotl Store!");
+
+                    System.out.println("ITEMS (๑>◡<๑)");
+                    System.out.println("water    - $1.50");
+                    System.out.println("cucumber - $3.00");
+                    System.out.println("shrimp   - $6.00");
+                    System.out.println("protein  - $8.00");
+                    System.out.println("toy      - $15.00");
+                    System.out.println("exit");
+
+                    System.out.printf("Money: $%.2f", yourPet.getMoney());
+                    System.out.println();
+
+                    System.out.print("> ");
+
+                    String purchase = scanner.nextLine().trim().toLowerCase();
+
+                    // buy water
+                    if (purchase.equals("water")) {
+                        if (yourPet.spendMoney(1.50)) {
+                            yourPet.drinkWater(25);
+                            System.out.println("Purchased water!");
+                        }
+                        else {
+                            System.out.println("You don't have enough money!");
+                        }
+                    }
+
+                    // buy cucumber
+                    else if (purchase.equals("cucumber")) {
+                        if (yourPet.spendMoney(3.00)) {
+                            yourPet.feed(15, 5);
+                            System.out.println("Purchased cucumber!");
+                        }
+                        else {
+                            System.out.println("You don't have enough money!");
+                        }
+                    }
+
+                    // buy shrimp
+                    else if (purchase.equals("shrimp")) {
+                        if (yourPet.spendMoney(6.00)) {
+                            yourPet.feed(25, 20);
+                            System.out.println("Purchased shrimp!");
+                        }
+                        else {
+                            System.out.println("You don't have enough money!");
+                        }
+                    }
+
+                    // buy protein
+                    else if (purchase.equals("protein")) {
+                        if (yourPet.spendMoney(8.00)) {
+                            yourPet.feed(20, 30);
+                            System.out.println("Purchased protein meal!");
+                        }
+                        else {
+                            System.out.println("You don't have enough money!");
+                        }
+                    }
+
+                    // buy toy
+                    else if (purchase.equals("toy")) {
+                        if (yourPet.spendMoney(15.00)) {
+                            yourPet.setHappiness(yourPet.getHappiness() + 25);
+                            if (yourPet.getHappiness() > 100) {
+                                yourPet.setHappiness(100);
+                            }
+                            System.out.println(yourPet.getName() + " loves the new toy!");
+                        }
+                        else {
+                            System.out.println("You don't have enough money!");
+                        }
+                    }
+
+                    // exit store
+                    else if (purchase.equals("exit")) {
+                        shopping = false;
+                    }
+                    else {
+                        System.out.println("Invalid store item");
+                    }
+
+                }
+            }
+            
+            // next day response
+            else if (response.equals("next day")) {
+                yourPet.nextDay();
+                System.out.println();
+                System.out.println("A new day begins...");
+
+                String event = yourPet.randomEvent();
+                System.out.println(event);
+
+                // check return value in conditional
+                if (yourPet.calculateHealthScore() < 30) {
+                    System.out.println("Warning: " + yourPet.getName() + " is in poor condition!");
+                }
+            }
+            else  {
+                System.out.println("Invalid command! Please try again.");
+                continue;
+            }
         }
 
-
+        // game over
+        if (!yourPet.getAlive()) {
+            System.out.println();
+            System.out.println("--------------------------------");
+            System.out.println("GAME OVER");
+            System.out.println("--------------------------------");
+            System.out.println("Your beloved axolotl " + yourPet.getName() + " could no longer continue ;-;");
+            System.out.println("RIP" + yourPet.getName() + ", you will be missed.");
+            System.out.println("You cared for " + yourPet.getName() + " for "+ yourPet.getDay()+ " days.");
+        }
     }
 }
