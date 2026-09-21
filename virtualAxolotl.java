@@ -110,7 +110,14 @@ public class virtualAxolotl {
         this.happiness = happiness;
     }
 
-    // non-void return method
+    //////////////////////////////
+    // non-void return methods  //
+    //////////////////////////////
+
+    public boolean isHealthy() {
+        return (food > 30 && hydration > 30 && protein > 30);
+    }
+
     // use of an explicit type casting
     public double getAverageNeeds() {
         return (double) (food + hydration + protein + happiness) / 4;
@@ -285,49 +292,84 @@ public class virtualAxolotl {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println("   ૮ ˶ᵔ ᵕ ᵔ˶ ა   ");
-        System.out.println("Virtual Axolotl Simulator!");
-        System.out.println();
         
         System.out.println("-----------------------------------------------");
+        System.out.println("                  ૮ ˶ᵔ ᵕ ᵔ˶ ა                  ");
+        System.out.println("           Virtual Axolotl Simulator!          ");
+        System.out.println("-----------------------------------------------");
+        System.out.println();
+        
         System.out.print("You just adopted an axolotl! What's its name?: ");
         String newName = scanner.nextLine().trim();
-        System.out.println("-----------------------------------------------");
 
-        virtualAxolotl yourPet = new virtualAxolotl(newName.substring(0,1).toUpperCase() + newName.toLowerCase().substring(1));
-        System.out.println(yourPet.name);
-
-        while (true) {
-            System.out.println("-------------------------------");
-            System.out.println("What would you like to do? ");
-            System.out.println("feed | water | status | store | quit");
-            String response = scanner.nextLine();
-
-            if (response.toLowerCase() == "quit") {
-                break;
-            }
-
-            else if (response == "status") {
-                if (yourPet.hydration <= 20 && yourPet.hydration > 0) {
-                    System.out.println("Your axolotl is thirsty! They need water.");
-                }
-            }
-
-            else if (response == "store") {
-                System.out.println("What would you like to purchase today?");
-                System.out.println("Store Catalog (enter one of the following): ");
-                System.out.println("water | cucumber | beef | toy");
-                String storePurchase = scanner.nextLine();
-
-                if (storePurchase.toLowerCase() == "water") {
-                    yourPet.money -= 1.5;
-                }
-            }
-
-            else {
-                break;
-            }
+        while (newName.length() == 0) {
+            System.out.println("Your axolotl needs a name!");
+            System.out.print("Enter a name: ");
+            newName = scanner.nextLine().trim();
         }
+
+        newName = newName.substring(0,1).toUpperCase() + newName.toLowerCase().substring(1);
+        virtualAxolotl yourPet = new virtualAxolotl(newName);
+        System.out.println("Welcome home, " + yourPet.getName() + " :)");
+
+        // while loop that runs continuously as long as your axolotl is alive
+        while (yourPet.getAlive()) {
+            System.out.println();
+            System.out.println("--------------------------------");
+            System.out.println("DAY " + yourPet.getDay());
+            System.out.println("--------------------------------");
+            System.out.println("What would you like to do?");
+            System.out.println();
+            System.out.println("feed | water | play | walk | status | store | next day | quit");
+
+            System.out.print("> ");
+
+            String response =
+                    scanner.nextLine().trim().toLowerCase();
+
+            // quit option
+            if (response.equals("quit")) {
+                System.out.println("Thanks for taking care of " + yourPet.getName() + "!");
+                break;
+            }
+
+            // status response
+            else if (response.equals("status")) {
+                yourPet.displayStatus();
+                System.out.println(yourPet.getConditionMessage());
+
+                // non-void method in conditional
+                if (!yourPet.isHealthy()) {
+                    System.out.println("Your axolotl's health needs attention!");
+                }
+
+                // another return method evaluated
+                if (yourPet.getAverageNeeds() >= 80) {
+                    System.out.println("Overall condition: Excellent!");
+                }
+                else if (yourPet.getAverageNeeds() >= 50) {
+                    System.out.println("Overall condition: Good.");
+                }
+                else {
+                    System.out.println("Overall condition: Poor");
+                }
+            }
+
+            // water response
+            else if (response.equals("water")) {
+                yourPet.drinkWater(25);
+                System.out.println(yourPet.getName() + " drank some water!");
+                System.out.println("+25 hydration");
+            }
+
+
+
+
+
+           
+
+        }
+
+
     }
 }
