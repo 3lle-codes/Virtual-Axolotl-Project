@@ -1,3 +1,22 @@
+/*
+Commenter: William Xiong
+Its pretty cool, but kinda boring.
+the walk enter integer u don't do error detection there. 
+theres no limit to how much u walk
+its kinda repetitive doing multiple commands, also u can do infinite actions a day
+i dont think u check if u have enough food to feed the axolotl
+there's no other indication of how the axolotl is other then the start of the day, then the axolotl immediately dies
+the ui is rlly good and i would like it if it had more visuals tho.
+Also why is everything in one big file? u can have multiple files for multiple classes, like a main/index java file then 
+a separate file for axolotl class w/ all the methods so u can have cleaner code. 
+*/
+
+/*
+Commenter: Michael
+Add a limit to what you can do in a day
+Added failsafes to prevent invalid inputs
+*/
+
 import java.util.*;
 
 public class virtualAxolotl {
@@ -297,7 +316,7 @@ public class virtualAxolotl {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("-----------------------------------------------");
+        System.out.println("-----------------------------------------------");// Cute! - Leo
         System.out.println("                  ૮ ˶ᵔ ᵕ ᵔ˶ ა                  ");
         System.out.println("           Virtual Axolotl Simulator!          ");
         System.out.println("-----------------------------------------------");
@@ -321,14 +340,15 @@ public class virtualAxolotl {
             System.out.println();
             System.out.println("--------------------------------");
             System.out.println("DAY " + yourPet.getDay());
-            System.out.println("--------------------------------");
-            System.out.println("What would you like to do?");
+            System.out.println("--------------------------------"); //This makes is harder to read the code because it pushes the code before up
+            System.out.println("What would you like to do?"); //maybe try only printing the day once per day - Leo
             System.out.println();
             System.out.println("feed | water | play | walk | status | store | next day | quit");
 
             System.out.print("> ");
-
+            
             String response =
+                    
                     scanner.nextLine().trim().toLowerCase();
 
             // quit option
@@ -368,6 +388,7 @@ public class virtualAxolotl {
 
             // feed response
             else if (response.equals("feed")) {
+                //I dont think u check 
                 System.out.println("What would you like to feed "+ yourPet.getName() + "?");
                 System.out.println("cucumber | shrimp | protein");
                 String foodChoice =scanner.nextLine().trim().toLowerCase();
@@ -409,6 +430,8 @@ public class virtualAxolotl {
             else if (response.equals("walk")) {
                 System.out.print("How many steps should " + yourPet.getName() + " walk? ");
                 int walkSteps = scanner.nextInt();
+                //use try except or use nextLine and convert to int
+                //it thinks its a string
                 scanner.nextLine();
 
                 // check if steps is valid
@@ -537,15 +560,15 @@ public class virtualAxolotl {
                 continue;
             }
         }
-
-        // game over
+        // I like this function, It takes around 6 days for the axolotl to reach poor conditions maybe you could make it harder to keep the axolotl alive so the decision you make matter
+        // game over 
         if (!yourPet.getAlive()) {
             System.out.println();
             System.out.println("--------------------------------");
             System.out.println("GAME OVER");
             System.out.println("--------------------------------");
             System.out.println("Your beloved axolotl " + yourPet.getName() + " could no longer continue ;-;");
-            System.out.println("RIP" + yourPet.getName() + ", you will be missed.");
+            System.out.println("RIP " + yourPet.getName() + ", you will be missed.");
             System.out.println("You cared for " + yourPet.getName() + " for "+ yourPet.getDay()+ " days.");
         }
     }
