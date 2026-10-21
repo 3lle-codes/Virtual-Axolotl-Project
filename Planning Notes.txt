@@ -1,0 +1,21 @@
+Virtual Axolotl Simulator – Planning Notes
+
+For this project, I wanted to build on my original Virtual Axolotl Simulator by making the store and inventory more organized while keeping the original gameplay.
+
+New Class: CareItem
+- I created an additional CareItem class to manage the items in the store
+- Each item has its own name, price, and quantity
+- Instead of having separate variables for every item, I can use objects to keep track of what the player owns
+
+Arrays
+- I used a CareItem[] array to store different items available in the store
+- I also used an int[] array to store axolotl's needs, including food, hydration, protein, and happiness
+- This makes it easier to go through its stats without checking each one separately
+
+Array Algorithms
+- I wanted to use arrays for more than just storing information, so I added methods to calculate average needs, find the lowest need, and count how many needs are low
+- I also added a search method to find specific items in the inventory when the player buys or uses something.
+
+Overall Goal
+My main goal was to make the code more organized and easier to expand without changing how the original simulator works.
+I also wanted the new features to actually affect the gameplay instead of adding them just to meet the requirements.
