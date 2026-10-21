@@ -1,81 +1,50 @@
-/*
-Commenter: William Xiong
-Its pretty cool, but kinda boring.
-the walk enter integer u don't do error detection there. 
-theres no limit to how much u walk
-its kinda repetitive doing multiple commands, also u can do infinite actions a day
-i dont think u check if u have enough food to feed the axolotl
-there's no other indication of how the axolotl is other then the start of the day, then the axolotl immediately dies
-the ui is rlly good and i would like it if it had more visuals tho.
-Also why is everything in one big file? u can have multiple files for multiple classes, like a main/index java file then 
-a separate file for axolotl class w/ all the methods so u can have cleaner code. 
-*/
-
-/*
-Commenter: Michael
-Add a limit to what you can do in a day
-Added failsafes to prevent invalid inputs
-*/
-
-import java.util.*;
-
-public class virtualAxolotl {
-    // instance variables
+public class VirtualAxolotl {
+    // Instance variables: the axolotl's needs and progress.
     private String name;
     private int happiness;
-
     private int food;
     private int hydration;
     private int protein;
     private int steps;
-    private int day; 
-
+    private int day;
     private double money;
     private boolean alive;
 
-    //////////////////
-    // constructors //
-    //////////////////
+    // Inventory: store purchases are saved until the player uses them.
+    private int waterBottles;
+    private int cucumbers;
+    private int shrimps;
+    private int proteinMeals;
+    private int toys;
 
-    // constructor 1
-    public virtualAxolotl(String name) {
-        this.name = name;
-
-        food = 100;
-        hydration = 100;
-        protein = 100;
-        happiness = 50; 
-
-        steps = 0;
-        day = 1;
-
-        money = 150.0;
-        alive = true;
+    // Constructor 1: default starting money.
+    public VirtualAxolotl(String name) {
+        this(name, 150.0);
     }
 
-    // constructor 2 (overloaded)
-    public virtualAxolotl(String name, double startingMoney) {
+    // Constructor 2 (overloaded): lets the player choose starting money.
+    public VirtualAxolotl(String name, double startingMoney) {
         this.name = name;
-
-        happiness = 50; 
-
         food = 100;
         hydration = 100;
         protein = 100;
-        happiness = 50; 
-
+        happiness = 50;
         steps = 0;
         day = 1;
-
         money = startingMoney;
         alive = true;
-    } 
 
+        // A couple of starting supplies; future supplies must be purchased.
+        waterBottles = 1;
+        cucumbers = 1;
+        shrimps = 0;
+        proteinMeals = 0;
+        toys = 0;
+    }
 
-    /////////////////////
-    // getter methods  //
-    /////////////////////
-
+    ////////////////////
+    // Getter methods //
+    ////////////////////
     public String getName() {
         return name;
     }
@@ -85,7 +54,7 @@ public class virtualAxolotl {
     }
 
     public int getFood() {
-        return food; 
+        return food;
     }
 
     public int getHydration() {
@@ -112,53 +81,86 @@ public class virtualAxolotl {
         return alive;
     }
 
+    public int getWaterBottles() {
+        return waterBottles;
+    }
 
-    /////////////////////
-    // setter methods  //
-    /////////////////////
+    public int getCucumbers() {
+        return cucumbers;
+    }
 
+    public int getShrimps() {
+        return shrimps;
+    }
+
+    public int getProteinMeals() {
+        return proteinMeals;
+    }
+
+    public int getToys() {
+        return toys;
+    }
+
+    ////////////////////
+    // Setter methods //
+    ////////////////////
     public void setName(String name) {
-        this.name = name;
+        if (name != null && name.trim().length() > 0) {
+            this.name = name.trim();
+        }
     }
 
     public void setMoney(double money) {
-        this.money = money;
+        if (money >= 0) {
+            this.money = money;
+        }
     }
 
     public void setHappiness(int happiness) {
         this.happiness = happiness;
-
         if (this.happiness > 100) {
             this.happiness = 100;
         }
-
         if (this.happiness < 0) {
             this.happiness = 0;
         }
     }
 
-
-    //////////////////////////////
-    // non-void return methods  //
-    //////////////////////////////
-
+    /////////////////////////////
+    // Non-void return methods //
+    /////////////////////////////
     public boolean isHealthy() {
-        return (food > 30 && hydration > 30 && protein > 30);
+        return food > 30 && hydration > 30 && protein > 30;
     }
 
-    // use of an explicit type casting
+    // The double cast prevents integer division.
     public double getAverageNeeds() {
         return (double) (food + hydration + protein + happiness) / 4;
     }
 
+    // Reuses the average instead of repeating the same calculation.
     public int calculateHealthScore() {
-        return (food + hydration + protein + happiness) / 4;
+        return (int) getAverageNeeds();
     }
 
-    // feed method
-    public void feed(int foodAmount, int proteinAmount) {
-        food += foodAmount;
-        protein += proteinAmount;
+    // Feed only if the player has purchased (or started with) the food.
+    // Returns false when the item is not available.
+    public boolean feed(String foodChoice) {
+        if (foodChoice.equals("cucumber") && cucumbers > 0) {
+            cucumbers--;
+            food += 15;
+            protein += 5;
+        } else if (foodChoice.equals("shrimp") && shrimps > 0) {
+            shrimps--;
+            food += 25;
+            protein += 20;
+        } else if (foodChoice.equals("protein") && proteinMeals > 0) {
+            proteinMeals--;
+            food += 20;
+            protein += 30;
+        } else {
+            return false;
+        }
 
         if (food > 100) {
             food = 100;
@@ -166,96 +168,125 @@ public class virtualAxolotl {
         if (protein > 100) {
             protein = 100;
         }
+        return true;
     }
 
-    // water method
-    public void drinkWater(int amount) {
-        hydration += amount;
-
+    // Water also comes from inventory, not an unlimited free supply.
+    public boolean drinkWater() {
+        if (waterBottles <= 0) {
+            return false;
+        }
+        waterBottles--;
+        hydration += 25;
         if (hydration > 100) {
             hydration = 100;
         }
+        return true;
     }
 
-    // play method
-    public void play() {
-        happiness += 15;
+    // One play action. An owned toy is used for an extra happiness boost.
+    // Returns how much happiness the activity adds.
+    public int play() {
+        int gained = 15;
+        if (toys > 0) {
+            toys--;
+            gained = 25;
+        }
+        setHappiness(happiness + gained);
         food -= 5;
         hydration -= 8;
-
-        if (happiness > 100) {
-            happiness = 100;
-        }
         checkStats();
-    } 
+        return gained;
+    }
 
-    // walk method
+    // Walk to earn money; Main enforces the maximum number of steps.
     public double walk(int stepAmount) {
         steps += stepAmount;
-
         food -= 8;
         hydration -= 10;
-        happiness += 5;
+        setHappiness(happiness + 5);
 
-        // money earned from walking
         double earnedMoney = stepAmount * 0.002;
-
         money += earnedMoney;
-
-        if (happiness > 100) {
-            happiness = 100;
-        }
         checkStats();
-
         return earnedMoney;
     }
 
-    // next day method
     public void nextDay() {
         day++;
-
         food -= 15;
         hydration -= 20;
         protein -= 10;
-        happiness -= 5;
-
+        setHappiness(happiness - 5);
         checkStats();
     }
 
-    // spend money method
+    // The store uses this boolean return value for every purchase.
     public boolean spendMoney(double price) {
-        if (money >= price) {
+        if (price >= 0 && money >= price) {
             money -= price;
             return true;
         }
         return false;
     }
 
-    // random event
+    // Buying adds an item to inventory; it does not immediately change stats.
+    public boolean buyItem(String item) {
+        double price;
+        if (item.equals("water")) {
+            price = 1.50;
+        } else if (item.equals("cucumber")) {
+            price = 3.00;
+        } else if (item.equals("shrimp")) {
+            price = 6.00;
+        } else if (item.equals("protein")) {
+            price = 8.00;
+        } else if (item.equals("toy")) {
+            price = 15.00;
+        } else {
+            return false;
+        }
+
+        if (!spendMoney(price)) {
+            return false;
+        }
+
+        if (item.equals("water")) {
+            waterBottles++;
+        } else if (item.equals("cucumber")) {
+            cucumbers++;
+        } else if (item.equals("shrimp")) {
+            shrimps++;
+        } else if (item.equals("protein")) {
+            proteinMeals++;
+        } else if (item.equals("toy")) {
+            toys++;
+        }
+        return true;
+    }
+
+    // One random event per day: 15% money, 10% lonely, 10% snack.
     public String randomEvent() {
         double random = Math.random();
         if (random < 0.15) {
             money += 5;
             return name + " found $5 while exploring!";
-        }
-        else if (random < 0.25) {
-            happiness -= 10;
+        } else if (random < 0.25) {
+            setHappiness(happiness - 10);
             checkStats();
             return name + " seems lonely today.";
-        }
-        else if (random < 0.35) {
+        } else if (random < 0.35) {
             food += 10;
             if (food > 100) {
                 food = 100;
             }
             return name + " found a tasty snack!";
-        }
-        else {
+        } else {
             return "Nothing unusual happened today.";
         }
     }
 
-    // check stats
+    // Keep stats within their limits and update the alive boolean.
     private void checkStats() {
         if (food < 0) {
             food = 0;
@@ -269,35 +300,28 @@ public class virtualAxolotl {
         if (happiness < 0) {
             happiness = 0;
         }
-        // compound logic
+
         if (food <= 0 || hydration <= 0) {
             alive = false;
         }
     }
 
-    // status message
     public String getConditionMessage() {
         if (food <= 20 && hydration <= 20) {
             return name + " is EXTREMELY hungry and thirsty!";
-        }
-        else if (food <= 20) {
+        } else if (food <= 20) {
             return name + " is very hungry!";
-        }
-        else if (hydration <= 20) {
+        } else if (hydration <= 20) {
             return name + " really needs water!";
-        }
-        else if (happiness <= 20) {
+        } else if (happiness <= 20) {
             return name + " is feeling lonely.";
-        }
-        else if (food >= 80 && hydration >= 80 && happiness >= 80) {
+        } else if (food >= 80 && hydration >= 80 && happiness >= 80) {
             return name + " is thriving!";
-        }
-        else {
+        } else {
             return name + " is doing okay.";
         }
     }
 
-    // status display
     public void displayStatus() {
         System.out.println();
         System.out.println("--------------------------------");
@@ -311,265 +335,12 @@ public class virtualAxolotl {
         System.out.println("Steps:      " + steps);
         System.out.printf("Money:      $%.2f%n", money);
         System.out.println("--------------------------------");
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.println("-----------------------------------------------");// Cute! - Leo
-        System.out.println("                  ૮ ˶ᵔ ᵕ ᵔ˶ ა                  ");
-        System.out.println("           Virtual Axolotl Simulator!          ");
-        System.out.println("-----------------------------------------------");
-        System.out.println();
-        
-        System.out.print("You just adopted an axolotl! What's its name?: ");
-        String newName = scanner.nextLine().trim();
-
-        while (newName.length() == 0) {
-            System.out.println("Your axolotl needs a name!");
-            System.out.print("Enter a name: ");
-            newName = scanner.nextLine().trim();
-        }
-
-        newName = newName.substring(0,1).toUpperCase() + newName.toLowerCase().substring(1);
-        virtualAxolotl yourPet = new virtualAxolotl(newName);
-        System.out.println("Welcome home, " + yourPet.getName() + " :)");
-
-        // while loop that runs continuously as long as your axolotl is alive
-        while (yourPet.getAlive()) {
-            System.out.println();
-            System.out.println("--------------------------------");
-            System.out.println("DAY " + yourPet.getDay());
-            System.out.println("--------------------------------"); //This makes is harder to read the code because it pushes the code before up
-            System.out.println("What would you like to do?"); //maybe try only printing the day once per day - Leo
-            System.out.println();
-            System.out.println("feed | water | play | walk | status | store | next day | quit");
-
-            System.out.print("> ");
-            
-            String response =
-                    
-                    scanner.nextLine().trim().toLowerCase();
-
-            // quit option
-            if (response.equals("quit")) {
-                System.out.println("Thanks for taking care of " + yourPet.getName() + "!");
-                break;
-            }
-
-            // status response
-            else if (response.equals("status")) {
-                yourPet.displayStatus();
-                System.out.println(yourPet.getConditionMessage());
-
-                // non-void method in conditional
-                if (!yourPet.isHealthy()) {
-                    System.out.println("Your axolotl's health needs attention!");
-                }
-
-                // another return method evaluated
-                if (yourPet.getAverageNeeds() >= 80) {
-                    System.out.println("Overall condition: Excellent!");
-                }
-                else if (yourPet.getAverageNeeds() >= 50) {
-                    System.out.println("Overall condition: Good.");
-                }
-                else {
-                    System.out.println("Overall condition: Poor");
-                }
-            }
-
-            // water response
-            else if (response.equals("water")) {
-                yourPet.drinkWater(25);
-                System.out.println(yourPet.getName() + " drank some water!");
-                System.out.println("+25 hydration");
-            }
-
-            // feed response
-            else if (response.equals("feed")) {
-                //I dont think u check 
-                System.out.println("What would you like to feed "+ yourPet.getName() + "?");
-                System.out.println("cucumber | shrimp | protein");
-                String foodChoice =scanner.nextLine().trim().toLowerCase();
-
-                if (foodChoice.equals("cucumber")) {
-                    yourPet.feed(15, 5);
-                    System.out.println(yourPet.getName() + " ate cucumber!");
-                }
-                else if (foodChoice.equals("shrimp")) {
-                    yourPet.feed(25, 20);
-                    System.out.println(yourPet.getName() + " ate shrimp!");
-                }
-                else if (foodChoice.equals("protein")) {
-                    yourPet.feed(20, 30);
-                    System.out.println(yourPet.getName() + " ate a protein meal!");
-                }
-                else {
-                    System.out.println("That food does not exist.");
-                }
-            }
-
-            // play response
-            else if (response.equals("play")) {
-                System.out.println();
-                System.out.println(yourPet.getName()+ " is going swimming!");
-
-                // definite count-based for loop
-                for (int i = 1; i <= 5; i++) {
-                    System.out.println("Swimming lap " + i + "...");
-                }
-                yourPet.play();
-
-                System.out.println();
-                System.out.println(yourPet.getName() + " had fun!");
-                System.out.println("+15 happiness");
-            }
-
-            // walk response
-            else if (response.equals("walk")) {
-                System.out.print("How many steps should " + yourPet.getName() + " walk? ");
-                int walkSteps = scanner.nextInt();
-                //use try except or use nextLine and convert to int
-                //it thinks its a string
-                scanner.nextLine();
-
-                // check if steps is valid
-                while (walkSteps <= 0) {
-                    System.out.println("Steps must be greater than 0.");
-                    System.out.print("Enter number of steps: ");
-                    walkSteps = scanner.nextInt();
-                    scanner.nextLine();
-                }
-
-                double earned =yourPet.walk(walkSteps);
-
-                System.out.println(yourPet.getName() + " walked " + walkSteps + " steps!");
-                System.out.printf("You earned $%.2f!%n", earned);
-            }
-
-            // store response
-            else if (response.equals("store")) {
-                boolean shopping = true;
-
-                // dynamic loop
-                while (shopping) {
-                    System.out.println();
-                    System.out.println("You have entered the Axolotl Store!");
-
-                    System.out.println("ITEMS (๑>◡<๑)");
-                    System.out.println("water    - $1.50");
-                    System.out.println("cucumber - $3.00");
-                    System.out.println("shrimp   - $6.00");
-                    System.out.println("protein  - $8.00");
-                    System.out.println("toy      - $15.00");
-                    System.out.println("exit");
-
-                    System.out.printf("Money: $%.2f", yourPet.getMoney());
-                    System.out.println();
-
-                    System.out.print("> ");
-
-                    String purchase = scanner.nextLine().trim().toLowerCase();
-
-                    // buy water
-                    if (purchase.equals("water")) {
-                        if (yourPet.spendMoney(1.50)) {
-                            yourPet.drinkWater(25);
-                            System.out.println("Purchased water!");
-                        }
-                        else {
-                            System.out.println("You don't have enough money!");
-                        }
-                    }
-
-                    // buy cucumber
-                    else if (purchase.equals("cucumber")) {
-                        if (yourPet.spendMoney(3.00)) {
-                            yourPet.feed(15, 5);
-                            System.out.println("Purchased cucumber!");
-                        }
-                        else {
-                            System.out.println("You don't have enough money!");
-                        }
-                    }
-
-                    // buy shrimp
-                    else if (purchase.equals("shrimp")) {
-                        if (yourPet.spendMoney(6.00)) {
-                            yourPet.feed(25, 20);
-                            System.out.println("Purchased shrimp!");
-                        }
-                        else {
-                            System.out.println("You don't have enough money!");
-                        }
-                    }
-
-                    // buy protein
-                    else if (purchase.equals("protein")) {
-                        if (yourPet.spendMoney(8.00)) {
-                            yourPet.feed(20, 30);
-                            System.out.println("Purchased protein meal!");
-                        }
-                        else {
-                            System.out.println("You don't have enough money!");
-                        }
-                    }
-
-                    // buy toy
-                    else if (purchase.equals("toy")) {
-                        if (yourPet.spendMoney(15.00)) {
-                            yourPet.setHappiness(yourPet.getHappiness() + 25);
-                            if (yourPet.getHappiness() > 100) {
-                                yourPet.setHappiness(100);
-                            }
-                            System.out.println(yourPet.getName() + " loves the new toy!");
-                        }
-                        else {
-                            System.out.println("You don't have enough money!");
-                        }
-                    }
-
-                    // exit store
-                    else if (purchase.equals("exit")) {
-                        shopping = false;
-                    }
-                    else {
-                        System.out.println("Invalid store item");
-                    }
-
-                }
-            }
-            
-            // next day response
-            else if (response.equals("next day")) {
-                yourPet.nextDay();
-                System.out.println();
-                System.out.println("A new day begins...");
-
-                String event = yourPet.randomEvent();
-                System.out.println(event);
-
-                // check return value in conditional
-                if (yourPet.calculateHealthScore() < 30) {
-                    System.out.println("Warning: " + yourPet.getName() + " is in poor condition!");
-                }
-            }
-            else  {
-                System.out.println("Invalid command! Please try again.");
-                continue;
-            }
-        }
-        // I like this function, It takes around 6 days for the axolotl to reach poor conditions maybe you could make it harder to keep the axolotl alive so the decision you make matter
-        // game over 
-        if (!yourPet.getAlive()) {
-            System.out.println();
-            System.out.println("--------------------------------");
-            System.out.println("GAME OVER");
-            System.out.println("--------------------------------");
-            System.out.println("Your beloved axolotl " + yourPet.getName() + " could no longer continue ;-;");
-            System.out.println("RIP " + yourPet.getName() + ", you will be missed.");
-            System.out.println("You cared for " + yourPet.getName() + " for "+ yourPet.getDay()+ " days.");
-        }
+        System.out.println("INVENTORY");
+        System.out.println("Water:      " + waterBottles);
+        System.out.println("Cucumber:   " + cucumbers);
+        System.out.println("Shrimp:     " + shrimps);
+        System.out.println("Protein:    " + proteinMeals);
+        System.out.println("Toys:       " + toys);
+        System.out.println("--------------------------------");
     }
 }
