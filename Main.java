@@ -57,13 +57,10 @@ public class Main {
         while (shopping) {
             System.out.println();
             System.out.println("Welcome to the Axolotl Store!");
-            System.out.println("water    - $1.50");
-            System.out.println("cucumber - $3.00");
-            System.out.println("shrimp   - $6.00");
-            System.out.println("protein  - $8.00");
-            System.out.println("toy      - $15.00");
+            pet.displayStoreItems();
             System.out.println("exit");
             System.out.printf("Money: $%.2f%n", pet.getMoney());
+            System.out.println("Total store purchases: " + CareItem.getTotalPurchases());
             System.out.print("> ");
 
             String purchase = scanner.nextLine().trim().toLowerCase();
@@ -128,6 +125,11 @@ public class Main {
             else if (response.equals("status")) {
                 yourPet.displayStatus();
                 System.out.println(yourPet.getConditionMessage());
+                System.out.println("Lowest need: " + yourPet.getLowestNeedName()
+                        + " (" + yourPet.getLowestNeed() + "/100)");
+                if (yourPet.countLowNeeds() > 0) {
+                    System.out.println("Needs at 30 or below: " + yourPet.countLowNeeds());
+                }
 
                 if (!yourPet.isHealthy()) {
                     System.out.println("Your axolotl's health needs attention!");
