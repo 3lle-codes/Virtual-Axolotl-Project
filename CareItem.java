@@ -11,7 +11,8 @@ public class CareItem {
     public CareItem(String name, double price, int quantity) {
         this.name = name;
         this.price = price;
-        setQuantity(quantity);
+        setQuantity(quantity); //PRAISE: I appreciate using the method in the constructor rather than simply writing the code the 
+                               // method should do.
     }
 
     // get item name

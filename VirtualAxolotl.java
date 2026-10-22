@@ -34,7 +34,7 @@ public class VirtualAxolotl {
         inventory[0] = new CareItem("water", 1.50, 1);
         inventory[1] = new CareItem("cucumber", 3.00, 1);
         inventory[2] = new CareItem("shrimp", 6.00, 0);
-        inventory[3] = new CareItem("protein", 8.00, 0);
+        inventory[3] = new CareItem("protein", 8.00, 0); //SUGGESTION: Specify why protein is being included
         inventory[4] = new CareItem("toy", 15.00, 0);
     }
 

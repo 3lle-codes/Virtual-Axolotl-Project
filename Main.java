@@ -36,7 +36,7 @@ public class Main {
                 if (amount >= 0 && amount <= 150) {
                     return new VirtualAxolotl(name, amount);
                 }
-                System.out.println("Please choose an amount between $0 and $150.");
+                System.out.println("Please choose an amount between $0 and $150."); //QUESTION: Why was 150 dollars chosen as the max amount?
             } catch (NumberFormatException error) {
                 System.out.println("Please enter a valid amount, like 75 or 75.50.");
             }
@@ -89,7 +89,7 @@ public class Main {
         System.out.println();
 
         System.out.print("You just adopted an axolotl! What's its name? ");
-        String newName = scanner.nextLine().trim();
+        String newName = scanner.nextLine().trim(); //STYLE: Maybe keep the variable name "Name" instead of newName
 
         // name input
         while (newName.length() == 0) {
