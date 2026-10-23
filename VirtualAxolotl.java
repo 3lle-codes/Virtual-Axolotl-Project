@@ -35,7 +35,7 @@ public class VirtualAxolotl {
         inventory[1] = new CareItem("cucumber", 3.00, 1);
         inventory[2] = new CareItem("shrimp", 6.00, 0);
         inventory[3] = new CareItem("protein", 8.00, 0); //SUGGESTION: Specify why protein is being included
-        inventory[4] = new CareItem("toy", 15.00, 0);
+        inventory[4] = new CareItem("toy", 15.00, 0);    // as it is confusing since there is already shrimp
     }
 
     // getter methods
@@ -113,8 +113,8 @@ public class VirtualAxolotl {
         if (this.happiness > 100) {
             this.happiness = 100;
         }
-        if (this.happiness < 0) {
-            this.happiness = 0;
+        if (this.happiness < 0) {  //PRAISE: I like how there are if statements checking if the happiness goes over 100 or under
+            this.happiness = 0;    // 0 and sets them to in range values.
         }
     }
 

@@ -37,7 +37,7 @@ public class Main {
                     return new VirtualAxolotl(name, amount);
                 }
                 System.out.println("Please choose an amount between $0 and $150."); //QUESTION: Why was 150 dollars chosen as the max amount?
-            } catch (NumberFormatException error) {
+            } catch (NumberFormatException error) {                                 // Is there a reason it is not 100 or 200?
                 System.out.println("Please enter a valid amount, like 75 or 75.50.");
             }
         }
@@ -160,8 +160,8 @@ public class Main {
 
                     if (yourPet.calculateHealthScore() < 30) {
                         System.out.println("Warning: " + yourPet.getName()
-                                + " is in poor condition!");
-                    }
+                                + " is in poor condition!");    //SUGGESTION: Maybe make the warning trigger sooner than 30 health
+                    }                                           // as by that point the axolotl might be in grave danger.
                 }
             }
 
